@@ -3,21 +3,27 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/news"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="News"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/pet_products"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="Pet Products"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/event_finder"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="Find Events"/>
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/dog_sales"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="Find Dogs!"/>
+        <item
+            android:id="@+id/cat_sales"
+            android:title="Find Cats!"/>
+        <item
+            android:id="@+id/dog_park_finder"
+            android:title="Local Dog Parks"/>
     </group>
 
     <item android:title="Communicate">

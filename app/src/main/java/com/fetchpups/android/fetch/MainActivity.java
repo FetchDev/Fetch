@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+//import static com.fetchpups.android.fetch.R.styleable.NavigationView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -80,17 +82,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.news) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.pet_products) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.event_finder) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.dog_sales) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.cat_sales) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.dog_park_finder) {
 
         }
 
