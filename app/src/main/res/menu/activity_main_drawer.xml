@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/news"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_news"
             android:title="News"/>
         <item
             android:id="@+id/pet_products"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_business"
             android:title="Pet Products"/>
         <item
             android:id="@+id/event_finder"
@@ -16,27 +16,15 @@
             android:title="Find Events"/>
         <item
             android:id="@+id/dog_sales"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_paw"
             android:title="Find Dogs!"/>
         <item
             android:id="@+id/cat_sales"
+            android:icon="@drawable/ic_menu_paw"
             android:title="Find Cats!"/>
         <item
             android:id="@+id/dog_park_finder"
+            android:icon="@drawable/ic_menu_location"
             android:title="Local Dog Parks"/>
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
-        </menu>
-    </item>
-
 </menu>
