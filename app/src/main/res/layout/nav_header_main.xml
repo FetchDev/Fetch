@@ -24,77 +24,28 @@
             android:src="@android:drawable/sym_def_app_icon"/>
         <LinearLayout
             android:orientation="horizontal"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="16dp"
+                android:src="@drawable/ic_menu_guestaccount"/>
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/name"
-                android:padding="16dp"
+                android:layout_gravity="center_vertical"
                 android:text="@string/account"
                 android:textStyle="bold"
                 android:textColor="#fff"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_down"/>
+
         </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
-        android:background="@color/darkGreen"
-        android:id="@+id/accountArea"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/useraccounr"
-
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="26dp"
-                android:layout_marginRight="26dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_guestaccount"/>
-            <TextView
-                android:text="@string/guest"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/login"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="26dp"
-                android:layout_marginRight="26dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_login"/>
-            <TextView
-                android:text="@string/login"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

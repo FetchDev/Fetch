@@ -2,6 +2,8 @@ package com.fetchpups.android.fetch;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -71,22 +73,57 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.news) {
-            // Handle the camera action
-        } else if (id == R.id.pet_products) {
-
-        } else if (id == R.id.event_finder) {
-
-        } else if (id == R.id.dog_sales) {
-
-        } else if (id == R.id.cat_sales) {
-
-        } else if (id == R.id.dog_park_finder) {
-
-        }
+        displayView(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /***
+     * Displays respected fragment that user selected from navigation menu
+     */
+    private void displayView(int viewId) {
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+
+        switch(viewId){
+            case R.id.news:
+//                fragment = new Fragment();  //Modify this to correct fragment after respective fragment files created
+                title = "News";
+                break;
+            case R.id.pet_products:
+//                fragment = new Fragment();
+                title = "Pet Products";
+                break;
+            case R.id.event_finder:
+//                fragment = new Fragment();
+                title = "Event finder";
+                break;
+            case R.id.dog_sales:
+//                fragment = new Fragment();
+                title = "Dog Adoptions";
+                break;
+            case R.id.cat_sales:
+//                fragment = new Fragment();  //
+                title = "Cat Adoptions";
+                break;
+            case R.id.dog_park_finder:
+                fragment = new DogParkMapsFragment();
+                title = "Dog Park Finder";
+                break;
+        }
+
+        //Process the fragment replacement as long as there's a valid fragment
+        if(fragment != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame, fragment);
+            ft.commit();
+        }
+
+        //Setup the toolbar title correctly
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 }
