@@ -89,23 +89,23 @@ public class MainActivity extends AppCompatActivity
 
         switch(viewId){
             case R.id.news:
-//                fragment = new Fragment();  //Modify this to correct fragment after respective fragment files created
+                fragment = new BlankFragment();  //Modify this to correct fragment after respective fragment files created
                 title = "News";
                 break;
             case R.id.pet_products:
-//                fragment = new Fragment();
+                fragment = new BlankFragment();
                 title = "Pet Products";
                 break;
             case R.id.event_finder:
-//                fragment = new Fragment();
+                fragment = new BlankFragment();
                 title = "Event finder";
                 break;
             case R.id.dog_sales:
-//                fragment = new Fragment();
+                fragment = new BlankFragment();
                 title = "Dog Adoptions";
                 break;
             case R.id.cat_sales:
-//                fragment = new Fragment();  //
+                fragment = new BlankFragment();  //
                 title = "Cat Adoptions";
                 break;
             case R.id.dog_park_finder:
