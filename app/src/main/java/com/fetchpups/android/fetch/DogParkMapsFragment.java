@@ -70,8 +70,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     //JSON Data
     RequestQueue mRequestQueue;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -177,7 +175,7 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         LatLng placeLoc = new LatLng(latitude, longitude);
         markerOptions.position(placeLoc);
         markerOptions.title(title);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_paw));
         googleMap.addMarker(markerOptions);
 
     }
