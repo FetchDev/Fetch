@@ -21,6 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -31,12 +37,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.content.Context.LOCATION_SERVICE;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.fetchpups.android.fetch.R.id.map;
 
 
@@ -45,7 +57,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     //Map & Location Data
     private GoogleMap googleMap;
     private MapView mMapView;
-    private LocationRequest mLocationRequest;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
 
@@ -56,6 +67,9 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     //ID for the permission request
     private static final int READ_LOCATION_PERMISSIONS_REQUEST = 1;
 
+    //JSON Data
+    RequestQueue mRequestQueue;
+
 
 
     @Override
@@ -63,7 +77,7 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
 
         View rootView = inflater.inflate(R.layout.location_fragment, container, false);
 
-//        getLocationPermission();
+        mRequestQueue = Volley.newRequestQueue(getActivity());
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -77,34 +91,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         }
 
         mMapView.getMapAsync(this);
-
-        //Old getMapAsync code
-        //This code contains a map fragment - meant to show on the bottom of the current view
-//        mMapView.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(GoogleMap mMap) {
-//                googleMap = mMap;
-//
-//
-//                // For showing a move to my location button
-////                googleMap.setMyLocationEnabled(true);
-//
-//
-//
-//                // For dropping a marker at a point on the Map
-//                LatLng currentLocation = new LatLng(latitude, longitude);
-//                googleMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location").snippet("Marker Description"));
-//
-//                // For zooming automatically to the location of the marker
-//                CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
-//                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//            }
-//
-//
-//        });
-
-
-
         return rootView;
     }
 
@@ -127,14 +113,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             buildGoogleApiClient();
             googleMap.setMyLocationEnabled(true);
         }
-
-//        // For dropping a marker at a point on the Map
-//        LatLng currentLocation = new LatLng(latitude, longitude);
-//        googleMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location").snippet("Marker Description"));
-//
-//        // For zooming automatically to the location of the marker
-//        CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
-//        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
 
@@ -150,16 +128,71 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             LatLng currLoc = new LatLng(latitude, longitude);
             googleMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currLoc, 11));
+
+
+            processPlacesAPI(latitude, longitude);
         }
+    }
+
+    public void processPlacesAPI(double latitude, double longitude){
+        String jsonURL = getUrl(latitude, longitude);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonURL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            JSONArray jsonArray = response.getJSONArray("results");
+
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject fullLocationInfo = jsonArray.getJSONObject(i);
+                                String locationTitle = fullLocationInfo.getString("name");
+                                JSONObject locationCoord = fullLocationInfo.getJSONObject("geometry").getJSONObject("location");
+                                double mLatitude = locationCoord.getDouble("lat");
+                                double mLongitude = locationCoord.getDouble("lng");
+
+                                Log.i("jsonObjectRequest", locationTitle);
+                                insertLocationMarkers(mLatitude, mLongitude, locationTitle);
+                            }
 
 
-//        mLocationRequest = new LocationRequest();
-//        mLocationRequest.setInterval(1000);
-//        mLocationRequest.setFastestInterval(1000);
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-//        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-//        }
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("jsonObjectRequest", "Error while fetching JSON");
+                    }
+                }
+        );
+        mRequestQueue.add(jsonObjectRequest);
+    }
+
+    private void insertLocationMarkers(double latitude, double longitude, String title){
+        MarkerOptions markerOptions = new MarkerOptions();
+        LatLng placeLoc = new LatLng(latitude, longitude);
+        markerOptions.position(placeLoc);
+        markerOptions.title(title);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        googleMap.addMarker(markerOptions);
+
+    }
+
+    private String getUrl(double latitude, double longitude){
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("location=" + latitude + "," + longitude);
+        googlePlacesUrl.append("&radius=" + "30000");   //30,000 meters = ~20 miles
+        googlePlacesUrl.append("&type=" + "park");
+        googlePlacesUrl.append("&keyword=" + "dog");
+        googlePlacesUrl.append("&key=" + "AIzaSyCRifebkgQdcCRnSNYdkb8G6HsuySjlCpI"); //Personal Google Places Web API
+
+        Log.d("getUrl", googlePlacesUrl.toString());
+
+        return googlePlacesUrl.toString();
     }
 
     @Override
@@ -248,7 +281,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     }
 
     //Callback with the request from calling requestPermission
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -257,14 +289,13 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             case READ_LOCATION_PERMISSIONS_REQUEST: {
                 //If request cancelled, results[] is empty
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //TODO: (Permission granted) Do location related work here
+                    //(Permission granted) Do location related work here
                     if(mGoogleApiClient == null){
                         buildGoogleApiClient();
                     }
                     googleMap.setMyLocationEnabled(true);
                 } else {
-                    //(Permission denied). Disable functionality that depends on this permission
-                    //TODO: Set longitude/latitude to some default values before this?
+                    //TODO: (Permission denied). Disable functionality that depends on this permission
                     Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_SHORT).show();
                 }
                 return;
@@ -273,24 +304,5 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         }
-
-        //Make sure it's our original ACCESS_FINE_LOCATION request
-//        if(requestCode == READ_LOCATION_PERMISSIONS_REQUEST) {
-//            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                //TODO: Do our location related tasks here?
-//                Toast.makeText(getActivity(), "Access fine location permission granted", Toast.LENGTH_SHORT).show();
-//            } else{
-//                //showRationale = false is user clicks Never Ask Again, otherwise true
-//                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
-//
-//                if(showRationale) {
-//                    // do something to handle degraded mode?
-//                } else{
-//                    Toast.makeText(getActivity(), "Access fine location permission denied", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        } else {
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        }
     }
 }
