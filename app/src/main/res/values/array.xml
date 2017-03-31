@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Entries = Labels that the user sees -->
+    <string-array name="major_cities_entries">
+        <item>Tampa</item>
+        <item>St. Petersburg</item>
+        <item>Clearwater</item>
+        <item>Orlando</item>
+    </string-array>
+
+    <!--Values = Not visible to user, but what the programmer uses to compare the items-->
+    <string-array name="major_cities_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>
