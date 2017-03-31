@@ -1,6 +1,9 @@
 package com.fetchpups.android.fetch;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        checkIfFirstRun();
     }
 
     @Override
@@ -61,7 +66,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+//            return true;
+            startActivity(new Intent(this, SettingsActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -125,5 +131,18 @@ public class MainActivity extends AppCompatActivity
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    protected void checkIfFirstRun(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //If the flag does not exist, true is returned from getBoolean()
+        if(prefs.getBoolean("is_first_run", true)){
+            prefs.edit().putBoolean("is_first_run", false).apply();
+            showFirstRunOptions();
+        }
+    }
+
+    protected void showFirstRunOptions(){
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 }
