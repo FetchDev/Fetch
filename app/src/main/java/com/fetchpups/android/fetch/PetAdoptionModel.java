@@ -5,19 +5,19 @@ package com.fetchpups.android.fetch;
  */
 
 public class PetAdoptionModel {
-    private String mPetImageUrl;
+    private String mPetImgUrl;
     private String mPetName;
     private String mSrcUrl;
     //Possibly another field for description
 
-    public PetAdoptionModel(String petImageUrl, String petName, String srcUrl) {
-        mPetImageUrl    = petImageUrl;
+    public PetAdoptionModel(String petImgUrl, String petName, String srcUrl) {
+        mPetImgUrl      = petImgUrl;
         mPetName        = petName;
         mSrcUrl         = srcUrl;
     }
 
-    public String getPetImageUrl() {
-        return mPetImageUrl;
+    public String getPetImgUrl() {
+        return mPetImgUrl;
     }
 
     public String getPetName() {

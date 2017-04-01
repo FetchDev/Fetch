@@ -13,6 +13,7 @@ import android.view.ViewGroup;
  */
 public class BlankFragment extends Fragment {
 
+    private String testHtml = "";
 
     public BlankFragment() {
         // Required empty public constructor
@@ -23,7 +24,11 @@ public class BlankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
+
+        ApiHandler.sendDogListRequest("https://www.fetchpups.com/new-page-84/", getActivity());
+
+        return rootView;
     }
 
 }
