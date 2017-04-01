@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity
             prefs.edit().putBoolean("is_first_run", false).apply();
             showFirstRunOptions();
         }
+
+
     }
 
     protected void showFirstRunOptions(){
