@@ -2,8 +2,11 @@ package com.fetchpups.android.fetch.io;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.android.volley.Request;
@@ -23,9 +26,15 @@ import org.jsoup.select.Elements;
 import java.util.List;
 
 /**
- * Created by Eduardo on 3/31/2017.
+ *  The following are the utility functions that are available
+ *  {@link #getCityPrefUrl(Context, int)}
+ *  {@link #updateCatAdoptionList(Context, ArrayAdapter, List)}
+ *  {@link #updateDogAdoptionList(Context, ArrayAdapter, List)}
+ *  {@link #updateLocalEventList(Context, ArrayAdapter, List)}
+ *
+ *  Check {@link com.fetchpups.android.fetch.TestListViewFragment#onCreateView(LayoutInflater, ViewGroup, Bundle)}
+ *  for an example using the updateList functions
  */
-
 public final class ApiHandler {
 
     private static final String DOG_TAMPA_URL = "https://www.fetchpups.com/new-page-84/";
@@ -43,6 +52,23 @@ public final class ApiHandler {
     private static final String EVENT_CLEARWATER_URL = "https://www.fetchpups.com/events-1/";
     private static final String EVENT_ORLANDO_URL = "https://www.fetchpups.com/events-2/";
 
+    private static final String SALES_TAMPA_URL = "https://www.fetchpups.com/new-page-62/";
+    private static final String SALES_STPETE_URL = "https://www.fetchpups.com/sales/";
+    private static final String SALES_CLEARWATER_URL = "https://www.fetchpups.com/sales-1/";
+    private static final String SALES_ORLANDO_URL = "https://www.fetchpups.com/sales-2/";
+
+    private static final String NEWS_TAMPA_URL = "https://www.fetchpups.com/local-scoop/";
+    private static final String NEWS_STPETE_URL = "https://www.fetchpups.com/local-scoop-1/";
+    private static final String NEWS_CLEARWATER_URL = "https://www.fetchpups.com/local-scoop-2/";
+    private static final String NEWS_ORLANDO_URL = "https://www.fetchpups.com/local-scoop-3/";
+
+    private static final String SOCIAL_TAMPA_URL = "https://www.fetchpups.com/fetch-social/";
+    private static final String SOCIAL_STPETE_URL = "https://www.fetchpups.com/fetch-social-1/";
+    private static final String SOCIAL_CLEARWATER_URL = "https://www.fetchpups.com/fetch-social-2/";
+    private static final String SOCIAL_ORLANDO_URL = "https://www.fetchpups.com/fetch-social-3/";
+
+    private static final String NATIONAL_SCOOP_URL = "https://www.fetchpups.com/national-scoop-3/";
+
     private static List<PetAdoptionModel> dogList;
     private static List<PetAdoptionModel> catList;
     private static List<LocalEventModel> eventList;
@@ -52,13 +78,22 @@ public final class ApiHandler {
     private static  ArrayAdapter<LocalEventModel> eventListAdapter;
 
 
-    /*
-    *   These methods are self-explanatory. They generate the appropriate page url based on the user's selected city preference
+    /**
+     *  Returns the corresponding city-relevant page URL of the passed selection
+     * @param mContext  The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
+     * @param selection An integer flag used to select the relevant pages (Dog adoption, events, local news, etc)
+     *                  1 = Dog Adoption Pages
+     *                  2 = Cat Adoption Pages
+     *                  3 = Local Event Pages
+     *                  4 = Local Sales Pages
+     *                  5 = Local News/Scoop Pages
+     *                  6 = Local Social Pages
+     *                  7 = National News/Scoop Pages
+     * @return
      */
-    public static String getCityPrefApiUrl(Context mContext, int selection) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+    public static String getCityPrefUrl(Context mContext, int selection) {
 
-        int cityPref = Integer.parseInt(prefs.getString("major_city_preference", "1"));
+        int cityPref = getCityPref(mContext);
         String cityPrefUrl = "";
 
         switch (selection) {
@@ -71,15 +106,30 @@ public final class ApiHandler {
             case 3:             // 3 = Local Event Pages
                 cityPrefUrl = cityPrefUrlEventHelper(cityPref);
                 break;
-//            case 4:             // 4 = Maybe Sales Pages
-//
+            case 4:             // 4 = Local Sales Pages
+                cityPrefUrl = cityPrefUrlSalesHelper(cityPref);
+                break;
+            case 5:             // 5 = Local News Pages
+                cityPrefUrl = cityPrefUrlNewsHelper(cityPref);
+                break;
+            case 6:             // 6 = Local Social Pages
+                cityPrefUrl = cityPrefUrlSocialHelper(cityPref);
+                break;
+            case 7:
+                cityPrefUrl = NATIONAL_SCOOP_URL;
+                break;
         }
 
-//        TODO: Remove this if I decide not to use apiUrl
-//        String apiUrl = cityPrefUrl + "?format=json-pretty";
-        Log.d("Api.getCityPrefApiUrl", cityPrefUrl);
-
+        Log.d("Api.getCityPrefUrl", cityPrefUrl);
         return cityPrefUrl;
+    }
+
+    private static int getCityPref(Context mContext){
+        //Initialize the return value to default to Tampa
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int cityPref = Integer.parseInt(prefs.getString("major_city_preference", "1"));
+
+        return cityPref;
     }
 
     private static String cityPrefUrlDogHelper(int cityPref){
@@ -127,11 +177,60 @@ public final class ApiHandler {
         }
     }
 
-    /*
-    *   The following methods are used to update the supplied adapters with the remote information from the dog adoption pages.
+    private static String cityPrefUrlNewsHelper(int cityPref){
+        switch (cityPref) {
+            case 1:             // 1 = Tampa
+                return NEWS_TAMPA_URL;
+            case 2:             // 2 = St Pete
+                return NEWS_STPETE_URL;
+            case 3:            // 3 = Clearwater
+                return NEWS_CLEARWATER_URL;
+            case 4:            // 4 = Orlando
+                return NEWS_ORLANDO_URL;
+            default:           //This case shouldn't be reached, but return Tampa url just in case
+                return NEWS_TAMPA_URL;
+        }
+    }
+
+    private static String cityPrefUrlSalesHelper(int cityPref){
+        switch (cityPref) {
+            case 1:             // 1 = Tampa
+                return SALES_TAMPA_URL;
+            case 2:             // 2 = St Pete
+                return SALES_STPETE_URL;
+            case 3:             // 3 = Clearwater
+                return SALES_CLEARWATER_URL;
+            case 4:             // 4 = Orlando
+                return SALES_ORLANDO_URL;
+            default:            //This case shouldn't be reached, but return Tampa url just in case
+                return SALES_TAMPA_URL;
+        }
+    }
+
+    private static String cityPrefUrlSocialHelper(int cityPref){
+        switch (cityPref) {
+            case 1:             // 1 = Tampa
+                return SOCIAL_TAMPA_URL;
+            case 2:             // 2 = St Pete
+                return SOCIAL_STPETE_URL;
+            case 3:             // 3 = Clearwater
+                return SOCIAL_CLEARWATER_URL;
+            case 4:             // 4 = Orlando
+                return SOCIAL_ORLANDO_URL;
+            default:            //This case shouldn't be reached, but return Tampa url just in case
+                return SOCIAL_TAMPA_URL;
+        }
+    }
+
+    /**
+     * The following function is used to update the passed in list+adapter with the corresponding remote data
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
+     * @param listAdapter   The custom ArrayAdapter used with your list view.
+     * @param petList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
      */
     public static void updateDogAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
-        String apiUrl = getCityPrefApiUrl(context, 1);
+        String apiUrl = getCityPrefUrl(context, 1);
 
         dogList = petList;
         dogListAdapter = listAdapter;
@@ -197,12 +296,15 @@ public final class ApiHandler {
     }
 
 
-    /*
-    *   Utility functions for cat pages.
+    /**
+     * The following function is used to update the passed in list+adapter with the corresponding remote data
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
+     * @param listAdapter   The custom ArrayAdapter used with your list view.
+     * @param petList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
      */
-
     public static void updateCatAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
-        String apiUrl = getCityPrefApiUrl(context, 2);
+        String apiUrl = getCityPrefUrl(context, 2);
 
         catList = petList;
         catListAdapter = listAdapter;
@@ -264,12 +366,16 @@ public final class ApiHandler {
 
 
 
-    /*
-    *   Utility functions for updating event list adapters
+    /**
+     * The following function is used to update the passed in list+adapter with the corresponding remote data
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
+     * @param listAdapter   The custom ArrayAdapter used with your list view.
+     * @param eventList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
      */
     //TODO: Change this to respective EventListModel when the time comes
-    public static void updateEventList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
-        String apiUrl = getCityPrefApiUrl(context, 3);
+    public static void updateLocalEventList(Context context, ArrayAdapter<LocalEventModel> listAdapter, List<LocalEventModel> eventList){
+        String apiUrl = getCityPrefUrl(context, 3);
     }
 
 }
