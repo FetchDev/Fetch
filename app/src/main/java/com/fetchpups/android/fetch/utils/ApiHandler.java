@@ -77,7 +77,6 @@ public final class ApiHandler {
     private static  ArrayAdapter<PetAdoptionModel> catListAdapter;
     private static  ArrayAdapter<LocalEventModel> eventListAdapter;
 
-
     /**
      *  Returns the corresponding city-relevant page URL of the passed selection
      * @param mContext  The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
@@ -289,8 +288,7 @@ public final class ApiHandler {
             mPetImgUrl = post.getElementsByTag("img").attr("src");
 //            Log.d("parseDogHtml", "mPetImgUrl: " + mPetImgUrl);
 
-            PetAdoptionModel dog = new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc);
-            dogList.add(dog);
+            dogList.add(new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc));
         }
 
     }
@@ -359,8 +357,7 @@ public final class ApiHandler {
             //mPetImgUrl
             mPetImgUrl = post.getElementsByTag("img").attr("src");
 
-            PetAdoptionModel cat = new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc);
-            catList.add(cat);
+            catList.add(new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc));
         }
     }
 
@@ -369,13 +366,92 @@ public final class ApiHandler {
     /**
      * The following function is used to update the passed in list+adapter with the corresponding remote data
      * IMPORTANT: Initialize your adapter using an empty List before calling this function.
-     * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
-     * @param listAdapter   The custom ArrayAdapter used with your list view.
-     * @param eventList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
+     * @param context           The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
+     * @param listAdapter       The custom ArrayAdapter used with your list view.
+     * @param localEventList    The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
      */
-    //TODO: Change this to respective EventListModel when the time comes
-    public static void updateLocalEventList(Context context, ArrayAdapter<LocalEventModel> listAdapter, List<LocalEventModel> eventList){
+
+    public static void updateLocalEventList(Context context, ArrayAdapter<LocalEventModel> listAdapter, List<LocalEventModel> localEventList){
         String apiUrl = getCityPrefUrl(context, 3);
+
+        eventList = localEventList;
+        eventListAdapter = listAdapter;
+        sendEventListRequest(apiUrl, context);
+    }
+
+    //TODO: Revert to private && uncomment list/adapter code when finished testing
+    public static void sendEventListRequest(String url, Context context){
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
+
+                        //Rebuild the list and then notify the adapter that the list has changed
+//                        eventList.clear();
+                        parseEventHtml(response);
+//                        eventListAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("stringRequest", "Error while fetching HTML");
+                    }
+                });
+
+        mRequestQueue.add(stringRequest);
+    }
+
+    private static void parseEventHtml(String html){
+        Document doc = Jsoup.parse(html);
+        Element body = doc.body();
+
+        //All event posts are nested within an <article> tag
+        Elements eventPosts = body.getElementsByTag("article");
+
+        for(Element eventPost : eventPosts){
+            String  mEventTitle, mEventTime, mEventDate, mLocation, mLocationUrl, mImgUrl, mSrcUrl;
+            boolean mIsUpcoming;
+
+            //mEventTitle
+            mEventTitle = eventPost.getElementsByClass("eventlist-title-link").text();
+//            Log.d("parseEventHtml", "Event : " + mEventTitle);
+
+            //mEventDate
+            mEventDate = eventPost.getElementsByClass("event-date").text();
+
+            //mEventTime
+            if(!eventPost.getElementsByClass("event-time-12hr-start").isEmpty()){
+                mEventTime = eventPost.getElementsByClass("event-time-12hr-start").text() + " - " + eventPost.getElementsByClass("event-time-12hr-end").first().text();
+            } else{
+                mEventTime = eventPost.select("time.event-time-12hr").first().text() + " - " + eventPost.select("time.event-time-12hr").last().text();
+            }
+
+            //mLocation
+            mLocation = eventPost.getElementsByClass("eventlist-meta-address").text();
+
+            //mLocationUrl
+            mLocationUrl = eventPost.getElementsByClass("eventlist-meta-address").first().getElementsByClass("eventlist-meta-address-maplink").attr("href");
+
+            //mImgUrl
+            mImgUrl = eventPost.getElementsByClass("eventlist-thumbnail").attr("data-src");
+
+            //mSrcUrl
+            mSrcUrl = "https://www.fetchpups.com" + eventPost.getElementsByClass("eventlist-column-thumbnail").attr("href");
+
+            //mIsUpcoming
+            mIsUpcoming = !eventPost.parent().hasClass("eventlist--past");
+//            String testTxt = mIsUpcoming ? "upcoming" : "done";
+//            Log.d("parseEventHtml", "Event is: " + testTxt);
+
+
+//            eventList.add(new LocalEventModel(mEventTitle, mEventDate, mEventTime, mLocation, mLocationUrl, mImgUrl, mSrcUrl, mIsUpcoming));
+        }
+
+
     }
 
 }
