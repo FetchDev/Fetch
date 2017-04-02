@@ -32,13 +32,16 @@ public class TestListViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.adoption_list_view, container, false);
 
+        //Just initialize an empty list of the corresponding model you're working with
         ArrayList<PetAdoptionModel> demoDogList = new ArrayList<>();
 
+        //Declare the ListView + Custom adapters as normal
         ListView demoListView = (ListView) rootView.findViewById(R.id.adoption_list_view);
         PetAdoptionAdapter adapter = new PetAdoptionAdapter(getActivity(), demoDogList);
         demoListView.setAdapter(adapter);
 
-        ApiHandler.updateCatAdoptionList(getActivity(), adapter, demoDogList);
+        //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter
+        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoDogList);
 
         return rootView;
     }

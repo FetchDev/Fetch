@@ -55,7 +55,7 @@ public final class ApiHandler {
     /*
     *   These methods are self-explanatory. They generate the appropriate page url based on the user's selected city preference
      */
-    private static String getCityPrefApiUrl(Context mContext, int selection) {
+    public static String getCityPrefApiUrl(Context mContext, int selection) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         int cityPref = Integer.parseInt(prefs.getString("major_city_preference", "1"));
@@ -198,7 +198,7 @@ public final class ApiHandler {
 
 
     /*
-    *   Same stuff as dog adoption pages, but for cat pages.
+    *   Utility functions for cat pages.
      */
 
     public static void updateCatAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
