@@ -3,8 +3,8 @@ package com.fetchpups.android.fetch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,9 +45,9 @@ public final class ApiHandler {
     private static List<PetAdoptionModel> catList;
     private static List<LocalEventModel> eventList;
 
-    private static  RecyclerView.Adapter dogListAdapter;
-    private static  RecyclerView.Adapter catListAdapter;
-    private static  RecyclerView.Adapter eventListAdapter;
+    private static  ArrayAdapter<PetAdoptionModel> dogListAdapter;
+    private static  ArrayAdapter<PetAdoptionModel> catListAdapter;
+    private static  ArrayAdapter<LocalEventModel> eventListAdapter;
 
 
 
@@ -72,9 +71,9 @@ public final class ApiHandler {
 //
         }
 
-        //TODO: Remove this if I decide not to use apiUrl
-        String apiUrl = cityPrefUrl + "?format=json-pretty";
-        Log.d("Api.getCityPrefApiUrl", apiUrl);
+//        TODO: Remove this if I decide not to use apiUrl
+//        String apiUrl = cityPrefUrl + "?format=json-pretty";
+        Log.d("Api.getCityPrefApiUrl", cityPrefUrl);
 
         return cityPrefUrl;
     }
@@ -124,7 +123,7 @@ public final class ApiHandler {
         }
     }
 
-    public static void updateDogAdoptionList(Context context, RecyclerView.Adapter listAdapter, List<PetAdoptionModel> petList){
+    public static void updateDogAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
         String apiUrl = getCityPrefApiUrl(context, 1);
 
         dogList = petList;
@@ -140,13 +139,13 @@ public final class ApiHandler {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
+//                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
 
                         //TODO: Parse the entire HTML instead of the HTML from the JSON response (Has weird escape characters and char encoding)
-//                        dogList.clear();
-//                        //Rebuild the list etc etc
+                        dogList.clear();
+                        //Rebuild the list etc etc
                         parseDogHtml(response);
-//                        dogListAdapter.notifyDataSetChanged();
+                        dogListAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -169,7 +168,7 @@ public final class ApiHandler {
         Elements petPosts = body.getElementsByClass("intrinsic");
 
         String parserEmptyBool = String.valueOf(petPosts.isEmpty());
-        Log.d("parseDogHtml", "Is parser empty: " + parserEmptyBool);
+//        Log.d("parseDogHtml", "Is parser empty: " + parserEmptyBool);
 
         //Generate the PetAdoptionModel objects & add to List<> within this loop
         for (Element post : petPosts){
@@ -177,31 +176,36 @@ public final class ApiHandler {
 
             //mSrcUrl
             mSrcUrl = post.getElementsByTag("a").attr("href");
-            Log.d("parseDogHtml", "mSrcUrl: " + mSrcUrl);
+//            Log.d("parseDogHtml", "mSrcUrl: " + mSrcUrl);
 
-            //mPetName
-            mPetName = post.getElementsByTag("em").text();
-            Log.d("parseDogHtml", "mPetName: " + mPetName);
+            //mPetName && mPetDesc
+            //Some of the posts use a non-blocking space "&nbsp;" = '\u00a0' after the first word
+            String petDesc = post.getElementsByTag("p").text().replace("\u00a0", " ");
+            mPetName = petDesc.substring(0, petDesc.indexOf(' '));
+//            Log.d("parseDogHtml", "mPetDesc: " + petDesc);
+//            Log.d("parseDogHtml", "mPetName: " + mPetName);
 
             //mPetImgUrl
             mPetImgUrl = post.getElementsByTag("img").attr("src");
-            Log.d("parseDogHtml", "mPetImgUrl: " + mPetImgUrl);
+//            Log.d("parseDogHtml", "mPetImgUrl: " + mPetImgUrl);
 
-            PetAdoptionModel dog = new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl);
+            PetAdoptionModel dog = new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc);
             dogList.add(dog);
         }
 
     }
 
-    public static ArrayList<PetAdoptionModel> getCatAdoptionList(Context context){
+    public static void updateCatAdoptionList(Context context){
         String apiUrl = getCityPrefApiUrl(context, 2);
-        return null;
+
+
+        return;
     }
 
 
-    public static ArrayList<LocalEventModel> getEventList(Context context){
+    public static void updateEventList(Context context){
         String apiUrl = getCityPrefApiUrl(context, 3);
-        return null;
+        return;
     }
 
 }

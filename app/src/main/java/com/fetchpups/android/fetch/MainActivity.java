@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                 title = "Event finder";
                 break;
             case R.id.dog_sales:
-                fragment = new BlankFragment();
+                fragment = new TestListViewFragment();
                 title = "Dog Adoptions";
                 break;
             case R.id.cat_sales:

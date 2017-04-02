@@ -8,16 +8,22 @@ public class PetAdoptionModel {
     private String mPetImgUrl;
     private String mPetName;
     private String mSrcUrl;
-    //Possibly another field for description
+    private String mPetDesc;
 
-    public PetAdoptionModel(String petImgUrl, String petName, String srcUrl) {
+    public PetAdoptionModel(String petImgUrl, String petName, String srcUrl, String petDesc) {
         mPetImgUrl      = petImgUrl;
         mPetName        = petName;
         mSrcUrl         = srcUrl;
+        mPetDesc        = petDesc;
     }
 
     public String getPetImgUrl() {
         return mPetImgUrl;
+    }
+
+    //Possibly another field for description
+    public String getPetDesc() {
+        return mPetDesc;
     }
 
     public String getPetName() {
