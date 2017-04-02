@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.fetchpups.android.fetch.controllers.PetAdoptionAdapter;
+import com.fetchpups.android.fetch.io.ApiHandler;
+import com.fetchpups.android.fetch.models.PetAdoptionModel;
+
 import java.util.ArrayList;
 
 /**
@@ -34,7 +38,7 @@ public class TestListViewFragment extends Fragment {
         PetAdoptionAdapter adapter = new PetAdoptionAdapter(getActivity(), demoDogList);
         demoListView.setAdapter(adapter);
 
-        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoDogList);
+        ApiHandler.updateCatAdoptionList(getActivity(), adapter, demoDogList);
 
         return rootView;
     }

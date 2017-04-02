@@ -1,4 +1,4 @@
-package com.fetchpups.android.fetch;
+package com.fetchpups.android.fetch.models;
 
 /**
  * Created by Eduardo on 3/31/2017.

@@ -1,4 +1,4 @@
-package com.fetchpups.android.fetch;
+package com.fetchpups.android.fetch.io;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.fetchpups.android.fetch.models.LocalEventModel;
+import com.fetchpups.android.fetch.models.PetAdoptionModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,7 +52,9 @@ public final class ApiHandler {
     private static  ArrayAdapter<LocalEventModel> eventListAdapter;
 
 
-
+    /*
+    *   These methods are self-explanatory. They generate the appropriate page url based on the user's selected city preference
+     */
     private static String getCityPrefApiUrl(Context mContext, int selection) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -123,6 +127,9 @@ public final class ApiHandler {
         }
     }
 
+    /*
+    *   The following methods are used to update the supplied adapters with the remote information from the dog adoption pages.
+     */
     public static void updateDogAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
         String apiUrl = getCityPrefApiUrl(context, 1);
 
@@ -131,8 +138,7 @@ public final class ApiHandler {
         sendDogListRequest(apiUrl, context);
     }
 
-    //TODO: Revert to private after testing done
-    public static void sendDogListRequest(String url, Context context){
+    private static void sendDogListRequest(String url, Context context){
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -141,9 +147,8 @@ public final class ApiHandler {
                     public void onResponse(String response) {
 //                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
 
-                        //TODO: Parse the entire HTML instead of the HTML from the JSON response (Has weird escape characters and char encoding)
+                        //Rebuild the list and then notify the adapter of this change
                         dogList.clear();
-                        //Rebuild the list etc etc
                         parseDogHtml(response);
                         dogListAdapter.notifyDataSetChanged();
                     }
@@ -151,24 +156,20 @@ public final class ApiHandler {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("stringRequest", "Error while fetching JSON");
+                        Log.e("stringRequest", "Error while fetching HTML");
                     }
                 });
 
         mRequestQueue.add(stringRequest);
     }
 
-    //TODO: Change this back to private when done testing
-    public static void parseDogHtml(String html){
+    private static void parseDogHtml(String html){
         //Modify the dogList within here
         Document doc = Jsoup.parse(html);
         Element body = doc.body();
 
         //All posts are nested within the divs with class intrinsic
         Elements petPosts = body.getElementsByClass("intrinsic");
-
-        String parserEmptyBool = String.valueOf(petPosts.isEmpty());
-//        Log.d("parseDogHtml", "Is parser empty: " + parserEmptyBool);
 
         //Generate the PetAdoptionModel objects & add to List<> within this loop
         for (Element post : petPosts){
@@ -195,17 +196,80 @@ public final class ApiHandler {
 
     }
 
-    public static void updateCatAdoptionList(Context context){
+
+    /*
+    *   Same stuff as dog adoption pages, but for cat pages.
+     */
+
+    public static void updateCatAdoptionList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
         String apiUrl = getCityPrefApiUrl(context, 2);
 
+        catList = petList;
+        catListAdapter = listAdapter;
+        sendCatListRequest(apiUrl, context);
+    }
 
-        return;
+    private static void sendCatListRequest(String url, Context context){
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
+
+                        //Rebuild the list and then notify the adapter that the list has changed
+                        catList.clear();
+                        parseCatHtml(response);
+                        catListAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("stringRequest", "Error while fetching HTML");
+                    }
+                });
+
+        mRequestQueue.add(stringRequest);
+    }
+
+    private static void parseCatHtml(String html){
+        //Modify the catList within here
+        Document doc = Jsoup.parse(html);
+        Element body = doc.body();
+
+        //All posts are nested within the divs with class intrinsic
+        Elements petPosts = body.getElementsByClass("intrinsic");
+
+        //Generate the PetAdoptionModel objects & add to List<> within this loop
+        for (Element post : petPosts){
+            String mSrcUrl, mPetName, mPetImgUrl;
+
+            //mSrcUrl
+            mSrcUrl = post.getElementsByTag("a").attr("href");
+
+            //mPetName && mPetDesc
+            //Some of the posts use a non-blocking space "&nbsp;" = '\u00a0' after the first word
+            String petDesc = post.getElementsByTag("p").text().replace("\u00a0", " ");
+            mPetName = petDesc.substring(0, petDesc.indexOf(' '));
+
+            //mPetImgUrl
+            mPetImgUrl = post.getElementsByTag("img").attr("src");
+
+            PetAdoptionModel cat = new PetAdoptionModel(mPetImgUrl, mPetName, mSrcUrl, petDesc);
+            catList.add(cat);
+        }
     }
 
 
-    public static void updateEventList(Context context){
+
+    /*
+    *   Utility functions for updating event list adapters
+     */
+    //TODO: Change this to respective EventListModel when the time comes
+    public static void updateEventList(Context context, ArrayAdapter<PetAdoptionModel> listAdapter, List<PetAdoptionModel> petList){
         String apiUrl = getCityPrefApiUrl(context, 3);
-        return;
     }
 
 }

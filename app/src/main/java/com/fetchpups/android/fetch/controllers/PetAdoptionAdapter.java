@@ -1,4 +1,4 @@
-package com.fetchpups.android.fetch;
+package com.fetchpups.android.fetch.controllers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.fetchpups.android.fetch.R;
+import com.fetchpups.android.fetch.models.PetAdoptionModel;
 
 import java.util.ArrayList;
 
