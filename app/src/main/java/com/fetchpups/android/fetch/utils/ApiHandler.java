@@ -379,8 +379,7 @@ public final class ApiHandler {
         sendEventListRequest(apiUrl, context);
     }
 
-    //TODO: Revert to private && uncomment list/adapter code when finished testing
-    public static void sendEventListRequest(String url, Context context){
+    private static void sendEventListRequest(String url, Context context){
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -390,9 +389,9 @@ public final class ApiHandler {
 //                        Log.d("stringRequest", "Response preview: " + response.substring(0, 20));
 
                         //Rebuild the list and then notify the adapter that the list has changed
-//                        eventList.clear();
+                        eventList.clear();
                         parseEventHtml(response);
-//                        eventListAdapter.notifyDataSetChanged();
+                        eventListAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -448,7 +447,7 @@ public final class ApiHandler {
 //            Log.d("parseEventHtml", "Event is: " + testTxt);
 
 
-//            eventList.add(new LocalEventModel(mEventTitle, mEventDate, mEventTime, mLocation, mLocationUrl, mImgUrl, mSrcUrl, mIsUpcoming));
+            eventList.add(new LocalEventModel(mEventTitle, mEventDate, mEventTime, mLocation, mLocationUrl, mImgUrl, mSrcUrl, mIsUpcoming));
         }
 
 

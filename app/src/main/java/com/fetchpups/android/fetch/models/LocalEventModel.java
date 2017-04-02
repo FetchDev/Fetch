@@ -6,12 +6,12 @@ package com.fetchpups.android.fetch.models;
 
 public class LocalEventModel {
     private String mEventTitle;
-    private String mEventTime;      //Maybe two different fields for BeginTime/EndTime?
-    private String mEventDate;      //Look up SimpleDateFormat or Calendar (Probably SDF, Calendar is more for calculating stuff with Dates)
-    private String mLocation;       //Should this be a link to the provided Map URL, or just plain text of the location? Do both just in case
-    private String mLocationUrl;    //Map URL that points to this location
+    private String mEventTime;      //Holds the full range in a string ("9:00am - 3:00pm"). Directly from the web site, so it probably doesn't adjust to timezones.
+    private String mEventDate;      //Also directly from the website ("Mar 13, 2017")
+    private String mLocation;
+    private String mLocationUrl;    //Map URL that points to the location
     private String mImgUrl;
-    private String mSrcUrl;         //Can't get the event's src url directly, so just use this for now
+    private String mSrcUrl;         //Can't get the event's src url directly, so just use the post's self-url
     private boolean mIsUpcoming;
 
     public LocalEventModel(String eventTitle, String eventDate, String eventTime, String location, String locationUrl, String imgUrl, String srcUrl, boolean isUpcoming) {

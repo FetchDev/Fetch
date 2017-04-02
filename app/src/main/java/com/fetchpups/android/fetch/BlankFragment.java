@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fetchpups.android.fetch.utils.ApiHandler;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +25,6 @@ public class BlankFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
         Log.d("BlankFragment", "Test");
-        ApiHandler.sendEventListRequest("https://www.fetchpups.com/events-1/", getActivity());
 
         return rootView;
     }

@@ -33,7 +33,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel>{
     private ArrayList<PetAdoptionModel> mDataset;
 
     public PetAdoptionAdapter(Context context, ArrayList<PetAdoptionModel> dataset) {
-        super(context, R.layout.pet_item_view, dataset);
+        super(context, R.layout.example_pet_item_view, dataset);
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDataset = dataset;
@@ -52,7 +52,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel>{
         //Check if existing view is being reused, else inflate the view
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.pet_item_view, parent, false);
+            convertView = mInflater.inflate(R.layout.example_pet_item_view, parent, false);
             viewHolder.petName = (TextView) convertView.findViewById(R.id.item_pet_name);
             viewHolder.petDesc = (TextView) convertView.findViewById(R.id.item_pet_description);
             viewHolder.petImg = (ImageView) convertView.findViewById(R.id.item_pet_img);

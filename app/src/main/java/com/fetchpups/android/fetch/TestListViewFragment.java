@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.fetchpups.android.fetch.controllers.PetAdoptionAdapter;
-import com.fetchpups.android.fetch.utils.ApiHandler;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
+import com.fetchpups.android.fetch.utils.ApiHandler;
 
 import java.util.ArrayList;
 
@@ -30,18 +30,18 @@ public class TestListViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.adoption_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.example_adoption_list_view, container, false);
 
         //Initialize an empty list of the corresponding model
-        ArrayList<PetAdoptionModel> demoDogList = new ArrayList<>();
+        ArrayList<PetAdoptionModel> demoList = new ArrayList<>();
 
-        //Standard ListView + Custom adapters declarations
+        //Standard ListView + Custom adapters boilerplate
         ListView demoListView = (ListView) rootView.findViewById(R.id.adoption_list_view);
-        PetAdoptionAdapter adapter = new PetAdoptionAdapter(getActivity(), demoDogList);
+        PetAdoptionAdapter adapter = new PetAdoptionAdapter(getActivity(), demoList);
         demoListView.setAdapter(adapter);
 
-        //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter
-        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoDogList);
+        //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter to the list view
+        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoList);
 
         return rootView;
     }

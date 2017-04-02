@@ -21,7 +21,6 @@ public class PetAdoptionModel {
         return mPetImgUrl;
     }
 
-    //Possibly another field for description
     public String getPetDesc() {
         return mPetDesc;
     }
