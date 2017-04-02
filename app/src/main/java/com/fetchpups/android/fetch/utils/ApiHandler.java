@@ -1,4 +1,4 @@
-package com.fetchpups.android.fetch.io;
+package com.fetchpups.android.fetch.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

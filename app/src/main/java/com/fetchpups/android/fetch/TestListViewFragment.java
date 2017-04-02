@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.fetchpups.android.fetch.controllers.PetAdoptionAdapter;
-import com.fetchpups.android.fetch.io.ApiHandler;
+import com.fetchpups.android.fetch.utils.ApiHandler;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
 
 import java.util.ArrayList;
