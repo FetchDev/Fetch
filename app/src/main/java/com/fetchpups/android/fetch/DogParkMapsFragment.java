@@ -219,6 +219,7 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         if (location != null) {
             Log.v("Location Changed", location.getLatitude() + " and " + location.getLongitude());
 //            locationManager.removeUpdates(this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 

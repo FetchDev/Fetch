@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Location"
+        android:key="location_category">
+
+
+        <ListPreference
+            android:key="major_city_preference"
+            android:title="City"
+            android:defaultValue="1"
+            android:summary="%s"
+            android:entries="@array/major_cities_entries"
+            android:entryValues="@array/major_cities_values"
+            />
+
+
+    </PreferenceCategory>
+</PreferenceScreen>
