@@ -1,14 +1,10 @@
 package com.fetchpups.android.fetch.controllers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,9 +91,9 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
                 if (getContext() instanceof FragmentActivity){
                     FragmentTransaction ft = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.frame,fragment);
+                    ft.addToBackStack(null);
                     ft.commit();
                 }
-                //TODO: back button exits out of app, need to just close fragment
             }
         });
         return convertView;
