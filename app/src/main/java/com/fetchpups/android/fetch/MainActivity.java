@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-//        checkIfFirstRun();
+        checkIfFirstRun();
     }
 
     @Override
@@ -147,6 +147,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void showFirstRunOptions(){
-        startActivity(new Intent(this, SettingsActivity.class));
+        Fragment fragment = new IntroFragment();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frame, fragment);
+        ft.commit();
     }
 }

@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context="com.fetchpups.android.fetch.IntroFragment">
+
+    <RelativeLayout
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="121dp"
+        android:layout_height="77dp"
+        android:rotation="50"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@drawable/arrow" />
+
+        <TextView
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView3"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="Hello! Welcome to Fetch! Please tap the menu button to begin."
+        android:textColor="@color/colorPrimaryDark"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    </RelativeLayout>
+
+</FrameLayout>
