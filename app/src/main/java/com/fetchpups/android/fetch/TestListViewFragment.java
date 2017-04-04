@@ -18,6 +18,8 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class TestListViewFragment extends Fragment {
+    ArrayList<PetAdoptionModel> demoList;
+    PetAdoptionAdapter adapter;
 
 
     public TestListViewFragment() {
@@ -33,17 +35,22 @@ public class TestListViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.example_adoption_list_view, container, false);
 
         //Initialize an empty list of the corresponding model
-        ArrayList<PetAdoptionModel> demoList = new ArrayList<>();
+        demoList = new ArrayList<>();
 
         //Standard ListView + Custom adapters boilerplate
         ListView demoListView = (ListView) rootView.findViewById(R.id.adoption_list_view);
-        PetAdoptionAdapter adapter = new PetAdoptionAdapter(getActivity(), demoList);
+        adapter = new PetAdoptionAdapter(getActivity(), demoList);
         demoListView.setAdapter(adapter);
-
-        //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter to the list view
-        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoList);
 
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter to the list view
+
+        //Calling this in onResume will allow the screen to refresh on preference changes as well
+        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoList);
+        super.onResume();
+    }
 }
