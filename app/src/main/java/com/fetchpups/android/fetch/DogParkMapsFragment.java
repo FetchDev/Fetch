@@ -1,17 +1,13 @@
 package com.fetchpups.android.fetch;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +26,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +33,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,20 +41,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.content.Context.LOCATION_SERVICE;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static com.fetchpups.android.fetch.R.id.map;
+import java.util.ArrayList;
 
 
-public class DogParkMapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DogParkMapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener {
 
     //Map & Location Data
     private GoogleMap googleMap;
     private MapView mMapView;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
+    private ArrayList<Marker> parkMarkers = new ArrayList<>();
 
-    //Set default permissions to USF classroom
+    //Set default coordinates to USF classroom
     double latitude     = 28.058412;
     double longitude    = -82.410019;
 
@@ -80,7 +73,8 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
-        mMapView.onResume(); // needed to get the map to display immediately
+
+//        mMapView.onResume(); // needed to get the map to display immediately
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -111,13 +105,23 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             buildGoogleApiClient();
             googleMap.setMyLocationEnabled(true);
         }
+        googleMap.setOnMyLocationButtonClickListener(this);
     }
 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        requestAndUpdateLastLocation();
 
+    }
+
+    public void requestAndUpdateLastLocation(){
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        updateMapAndMarkersWithLastLocation(mLastLocation);
+    }
+
+    public void updateMapAndMarkersWithLastLocation(Location loc){
 
         if(mLastLocation != null){
             latitude = mLastLocation.getLatitude();
@@ -176,8 +180,31 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         markerOptions.position(placeLoc);
         markerOptions.title(title);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_paw));
-        googleMap.addMarker(markerOptions);
+        Marker temp = googleMap.addMarker(markerOptions);
+        parkMarkers.add(temp);
+    }
 
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Location prevLoc = mLastLocation;
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+
+        if(mLastLocation != null){
+
+            if((prevLoc.getLatitude() != mLastLocation.getLatitude()) && (prevLoc.getLongitude() != mLastLocation.getLongitude()) ){
+
+                if(!parkMarkers.isEmpty()){
+                    for(Marker marker : parkMarkers){
+                        marker.remove();
+                    }
+                    parkMarkers.clear();
+                }
+                requestAndUpdateLastLocation();
+            }
+        }
+
+        return true;   //Return false is basically calling the super method
     }
 
     private String getUrl(double latitude, double longitude){
@@ -211,8 +238,6 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
                 .build();
         mGoogleApiClient.connect();
     }
-
-
 
     @Override
     public void onLocationChanged(Location location) {
