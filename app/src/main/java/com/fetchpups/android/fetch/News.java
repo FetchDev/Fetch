@@ -26,7 +26,7 @@ public class News extends Fragment {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        //Force links and redirects to open nin the webview
+        //Force links and redirects to open in the webview
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.loadUrl(pageUrl);
 
