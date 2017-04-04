@@ -223,7 +223,7 @@ public final class ApiHandler {
 
     /**
      * The following function is used to update the passed in list+adapter with the corresponding remote data
-     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function. Call this in onResume so it responds to preference changes as well.
      * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
      * @param listAdapter   The custom ArrayAdapter used with your list view.
      * @param petList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
@@ -296,7 +296,7 @@ public final class ApiHandler {
 
     /**
      * The following function is used to update the passed in list+adapter with the corresponding remote data
-     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function. Call this in onResume so it responds to preference changes as well.
      * @param context       The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
      * @param listAdapter   The custom ArrayAdapter used with your list view.
      * @param petList       The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
@@ -365,7 +365,7 @@ public final class ApiHandler {
 
     /**
      * The following function is used to update the passed in list+adapter with the corresponding remote data
-     * IMPORTANT: Initialize your adapter using an empty List before calling this function.
+     * IMPORTANT: Initialize your adapter using an empty List before calling this function. Call this in onResume so it responds to preference changes as well.
      * @param context           The activity context that the caller belongs to. Just pass in getActivity() from your activity/fragment for this.
      * @param listAdapter       The custom ArrayAdapter used with your list view.
      * @param localEventList    The list that needs to be populated with remote data. Pass in the empty List that is used with the custom adapter.
