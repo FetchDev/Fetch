@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new DogParkMapsFragment();
                 title = "Dog Park Finder";
                 break;
+
         }
 
         //Process the fragment replacement as long as there's a valid fragment

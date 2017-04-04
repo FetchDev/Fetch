@@ -1,7 +1,14 @@
 package com.fetchpups.android.fetch.controllers;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +18,7 @@ import android.widget.TextView;
 
 import com.fetchpups.android.fetch.R;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
+import com.fetchpups.android.fetch.petWebView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,7 +27,7 @@ import java.util.ArrayList;
  * Created by Eduardo on 4/1/2017.
  */
 
-public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel>{
+public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
 
     //View lookup cache
     private static class ViewHolder {
@@ -73,8 +81,23 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel>{
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Either make an implicit intent to a browser with this url, or implement a WebView
-                Snackbar.make(v, "Src: " + currentPet.getSrcUrl(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                //Snackbar.make(v, "Src: " + currentPet.getSrcUrl(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+
+                //pass url into bundle for petWebView
+                Bundle bundle = new Bundle();
+                bundle.putString("url",currentPet.getSrcUrl());
+
+                //Create fragment and pass url into fragment
+                Fragment fragment = new petWebView();
+                fragment.setArguments(bundle);
+
+                //Display fragment
+                if (getContext() instanceof FragmentActivity){
+                    FragmentTransaction ft = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.frame,fragment);
+                    ft.commit();
+                }
+                //TODO: back button exits out of app, need to just close fragment
             }
         });
         return convertView;
