@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
                 title = "Dog Adoptions";
                 break;
             case R.id.cat_sales:
-                fragment = new BlankFragment();  //
+                fragment = new CatListView();  //
                 title = "Cat Adoptions";
                 break;
             case R.id.dog_park_finder:
