@@ -4,8 +4,9 @@ package com.fetchpups.android.fetch;
  * Created by micgl on 4/4/2017.
  */
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import android.widget.ListView;
-
-import com.fetchpups.android.fetch.R;
 import com.fetchpups.android.fetch.utils.ApiHandler;
 
 public class PetProducts extends Fragment {
@@ -32,6 +30,24 @@ public class PetProducts extends Fragment {
 
         //Force links and redirects to open in the webview
         mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN){
+                    WebView wView = (WebView) v;
+
+                    switch (keyCode){
+                        case KeyEvent.KEYCODE_BACK:
+                            if(wView.canGoBack()){
+                                wView.goBack();
+                                return true;
+                            }
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         mWebView.loadUrl(pageUrl);
 
         return v;

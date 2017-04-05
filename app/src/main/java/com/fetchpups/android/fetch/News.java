@@ -1,7 +1,8 @@
 package com.fetchpups.android.fetch;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,24 @@ public class News extends Fragment {
 
         //Force links and redirects to open in the webview
         mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN){
+                    WebView wView = (WebView) v;
+
+                    switch (keyCode){
+                        case KeyEvent.KEYCODE_BACK:
+                            if(wView.canGoBack()){
+                                wView.goBack();
+                                return true;
+                            }
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         mWebView.loadUrl(pageUrl);
 
         return v;
