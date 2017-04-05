@@ -280,6 +280,8 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     public void onPause() {
         super.onPause();
 
+        //TODO: Possibly store the selected icons + current camera pos?
+
         //Stop location updates when Fragment no longer active
         if(mGoogleApiClient != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
