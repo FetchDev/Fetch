@@ -53,6 +53,8 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     private MapView mMapView;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
+    boolean btnParkFlag = false, btnStoreFlag = false;
+    private ArrayList<Marker> parkMarkers = new ArrayList<>(), storeMarkers = new ArrayList<>();
 
 
     //Set default coordinates to USF classroom
@@ -128,9 +130,18 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             @Override
             public void onClick(View v) {
                 Log.d("onClick", "btnPark clicked");
-                googleMap.clear();
-                processPlacesAPI(lastLatitude, lastLongitude, 1);
-                Snackbar.make(rootView, "Nearby Dog Parks", Snackbar.LENGTH_LONG).show();
+
+                if(btnParkFlag){    //btnPark has previously been pressed = Parks on map
+                    for(Marker marker : parkMarkers){
+                        marker.remove();
+                    }
+                    parkMarkers.clear();
+                    btnParkFlag = false; //reset flag
+                } else{
+                    processPlacesAPI(lastLatitude, lastLongitude, 1);
+                    Snackbar.make(rootView, "Nearby Dog Parks", Snackbar.LENGTH_LONG).show();
+                    btnParkFlag = true;
+                }
             }
         });
 
@@ -138,9 +149,17 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
             @Override
             public void onClick(View v) {
                 Log.d("onClick", "btnStores clicked");
-                googleMap.clear();
-                processPlacesAPI(lastLatitude, lastLongitude, 2);
-                Snackbar.make(rootView, "Nearby Dog Stores", Snackbar.LENGTH_LONG).show();
+                if(btnStoreFlag){
+                    for(Marker marker : storeMarkers){
+                        marker.remove();
+                    }
+                    storeMarkers.clear();
+                    btnStoreFlag = false;
+                } else{
+                    processPlacesAPI(lastLatitude, lastLongitude, 2);
+                    Snackbar.make(rootView, "Nearby Dog Stores", Snackbar.LENGTH_LONG).show();
+                    btnStoreFlag = true;
+                }
             }
         });
     }
@@ -207,10 +226,12 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         markerOptions.title(title);
         if(sel == 1){
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_paw));
+            parkMarkers.add(googleMap.addMarker(markerOptions));
         } else{
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_store));
+            storeMarkers.add(googleMap.addMarker(markerOptions));
         }
-        googleMap.addMarker(markerOptions);
+//        googleMap.addMarker(markerOptions);
     }
 
     @Override
