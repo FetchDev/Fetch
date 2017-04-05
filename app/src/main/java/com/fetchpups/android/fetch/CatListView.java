@@ -29,7 +29,7 @@ public class CatListView extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.example_adoption_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.pet_list_view, container, false);
 
         //Initialize an empty list of the corresponding model
         kittyList = new ArrayList<>();

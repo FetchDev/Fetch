@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.fetchpups.android.fetch.R;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
 import com.fetchpups.android.fetch.petWebView;
+import com.fetchpups.android.fetch.utils.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
     private ArrayList<PetAdoptionModel> mDataset;
 
     public PetAdoptionAdapter(Context context, ArrayList<PetAdoptionModel> dataset) {
-        super(context, R.layout.example_pet_item_view, dataset);
+        super(context, R.layout.pet_item_view, dataset);
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDataset = dataset;
@@ -56,7 +57,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
         //Check if existing view is being reused, else inflate the view
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.example_pet_item_view, parent, false);
+            convertView = mInflater.inflate(R.layout.pet_item_view, parent, false);
             viewHolder.petName = (TextView) convertView.findViewById(R.id.item_pet_name);
             viewHolder.petDesc = (TextView) convertView.findViewById(R.id.item_pet_description);
             viewHolder.petImg = (ImageView) convertView.findViewById(R.id.item_pet_img);
@@ -72,7 +73,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
         viewHolder.petDesc.setText(currentPet.getPetDesc());
 
         //Picasso library for remote sources for ImageViews
-        Picasso.with(mContext).load(currentPet.getPetImgUrl()).resize(300,300).centerCrop().into(viewHolder.petImg);
+        Picasso.with(mContext).load(currentPet.getPetImgUrl()).resize(300,300).centerCrop().transform(new CircleTransform()).into(viewHolder.petImg);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
