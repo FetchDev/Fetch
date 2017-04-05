@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.fetchpups.android.fetch.R;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
 import com.fetchpups.android.fetch.petWebView;
-import com.fetchpups.android.fetch.utils.CircleTransform;
+import com.fetchpups.android.fetch.utils.RoundedCornersTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class PetAdoptionAdapter extends ArrayAdapter<PetAdoptionModel> {
         viewHolder.petDesc.setText(currentPet.getPetDesc());
 
         //Picasso library for remote sources for ImageViews
-        Picasso.with(mContext).load(currentPet.getPetImgUrl()).resize(300,300).centerCrop().transform(new CircleTransform()).into(viewHolder.petImg);
+        Picasso.with(mContext).load(currentPet.getPetImgUrl()).resize(300,300).transform(new RoundedCornersTransform()).centerCrop().into(viewHolder.petImg);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

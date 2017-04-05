@@ -20,13 +20,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 
 import com.squareup.picasso.Transformation;
 
 /**
  * Created by julian on 13/6/21.
  */
-public class CircleTransform implements Transformation {
+public class RoundedCornersTransform implements Transformation {
     @Override
     public Bitmap transform(Bitmap source) {
         int size = Math.min(source.getWidth(), source.getHeight());
@@ -47,15 +48,14 @@ public class CircleTransform implements Transformation {
         paint.setShader(shader);
         paint.setAntiAlias(true);
 
-        float r = size/2f;
-        canvas.drawCircle(r, r, r, paint);
-
+        float r = size / 8f;
+        canvas.drawRoundRect(new RectF(0, 0, source.getWidth(), source.getHeight()), r, r, paint);
         squaredBitmap.recycle();
         return bitmap;
     }
 
     @Override
     public String key() {
-        return "circle";
+        return "rounded_corners";
     }
 }
