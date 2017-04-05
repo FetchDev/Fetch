@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/webview"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context="com.fetchpups.android.fetch.PetProducts">
+
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/webview"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+        />
+
+    <ProgressBar
+        android:id="@+id/web_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:visibility="gone"
+        android:max="100"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:progressDrawable="@drawable/progress_bar_color"
+        />
+</FrameLayout>
