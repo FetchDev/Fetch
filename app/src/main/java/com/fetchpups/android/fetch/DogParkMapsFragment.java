@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -51,11 +53,11 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     private MapView mMapView;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
-    private ArrayList<Marker> parkMarkers = new ArrayList<>();
+
 
     //Set default coordinates to USF classroom
-    double latitude     = 28.058412;
-    double longitude    = -82.410019;
+    double lastLatitude = 28.058412;
+    double lastLongitude = -82.410019;
 
     //ID for the permission request
     private static final int READ_LOCATION_PERMISSIONS_REQUEST = 1;
@@ -63,10 +65,14 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     //JSON Data
     RequestQueue mRequestQueue;
 
+    //Layout variables
+    View rootView;
+    Button btnParks, btnStores;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.location_fragment, container, false);
+        rootView = inflater.inflate(R.layout.location_fragment, container, false);
 
         mRequestQueue = Volley.newRequestQueue(getActivity());
 
@@ -74,13 +80,16 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         mMapView.onCreate(savedInstanceState);
 
 
-//        mMapView.onResume(); // needed to get the map to display immediately
-
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        btnParks = (Button) rootView.findViewById(R.id.btnParks);
+        btnStores = (Button) rootView.findViewById(R.id.btnStores);
+
+        initBtnListeners();
 
         mMapView.getMapAsync(this);
         return rootView;
@@ -112,32 +121,49 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         requestAndUpdateLastLocation();
+    }
 
+    private void initBtnListeners(){
+        btnParks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("onClick", "btnPark clicked");
+                googleMap.clear();
+                processPlacesAPI(lastLatitude, lastLongitude, 1);
+                Snackbar.make(rootView, "Nearby Dog Parks", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        btnStores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("onClick", "btnStores clicked");
+                googleMap.clear();
+                processPlacesAPI(lastLatitude, lastLongitude, 2);
+                Snackbar.make(rootView, "Nearby Dog Stores", Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void requestAndUpdateLastLocation(){
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        updateMapAndMarkersWithLastLocation(mLastLocation);
-    }
-
-    public void updateMapAndMarkersWithLastLocation(Location loc){
-
         if(mLastLocation != null){
-            latitude = mLastLocation.getLatitude();
-            longitude = mLastLocation.getLongitude();
-
-            LatLng currLoc = new LatLng(latitude, longitude);
-            googleMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currLoc, 11));
-
-
-            processPlacesAPI(latitude, longitude);
+            updateValuesAndCameraWithLastLocation(mLastLocation);
         }
     }
 
-    public void processPlacesAPI(double latitude, double longitude){
-        String jsonURL = getUrl(latitude, longitude);
+    public void updateValuesAndCameraWithLastLocation(Location loc){
+
+        lastLatitude = loc.getLatitude();
+        lastLongitude = loc.getLongitude();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLatitude, lastLongitude), 11));
+
+
+    }
+
+    public void processPlacesAPI(double latitude, double longitude, final int sel){
+        String jsonURL = getUrl(latitude, longitude, sel);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonURL, null,
                 new Response.Listener<JSONObject>() {
@@ -154,7 +180,7 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
                                 double mLongitude = locationCoord.getDouble("lng");
 
                                 Log.i("jsonObjectRequest", locationTitle);
-                                insertLocationMarkers(mLatitude, mLongitude, locationTitle);
+                                insertLocationMarkers(mLatitude, mLongitude, locationTitle, sel);
                             }
 
 
@@ -174,46 +200,42 @@ public class DogParkMapsFragment extends Fragment implements LocationListener, O
         mRequestQueue.add(jsonObjectRequest);
     }
 
-    private void insertLocationMarkers(double latitude, double longitude, String title){
+    private void insertLocationMarkers(double latitude, double longitude, String title, int sel){
         MarkerOptions markerOptions = new MarkerOptions();
         LatLng placeLoc = new LatLng(latitude, longitude);
         markerOptions.position(placeLoc);
         markerOptions.title(title);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_paw));
-        Marker temp = googleMap.addMarker(markerOptions);
-        parkMarkers.add(temp);
+        if(sel == 1){
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_paw));
+        } else{
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_store));
+        }
+        googleMap.addMarker(markerOptions);
     }
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Location prevLoc = mLastLocation;
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-
-        if(mLastLocation != null){
-
-            if((prevLoc.getLatitude() != mLastLocation.getLatitude()) && (prevLoc.getLongitude() != mLastLocation.getLongitude()) ){
-
-                if(!parkMarkers.isEmpty()){
-                    for(Marker marker : parkMarkers){
-                        marker.remove();
-                    }
-                    parkMarkers.clear();
-                }
-                requestAndUpdateLastLocation();
-            }
-        }
-
-        return true;   //Return false is basically calling the super method
+        requestAndUpdateLastLocation();
+        return false;   //Return false is basically calling the super method
     }
 
-    private String getUrl(double latitude, double longitude){
+    private String getUrl(double latitude, double longitude, int nearbyPlace){
+        //1 = dog parks     2 = pet_stores
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + "30000");   //30,000 meters = ~20 miles
-        googlePlacesUrl.append("&type=" + "park");
-        googlePlacesUrl.append("&keyword=" + "dog");
-        googlePlacesUrl.append("&key=" + "AIzaSyCRifebkgQdcCRnSNYdkb8G6HsuySjlCpI"); //Personal Google Places Web API
+        if(nearbyPlace == 1){
+            googlePlacesUrl.append("location=" + latitude + "," + longitude);
+            googlePlacesUrl.append("&radius=" + "30000");   //30,000 meters = ~20 miles
+            googlePlacesUrl.append("&type=" + "park");
+            googlePlacesUrl.append("&keyword=" + "dog");
+            googlePlacesUrl.append("&key=" + "AIzaSyCRifebkgQdcCRnSNYdkb8G6HsuySjlCpI"); //Personal Google Places Web API
+        }
+
+        if(nearbyPlace == 2){
+            googlePlacesUrl.append("location=" + latitude + "," + longitude);
+            googlePlacesUrl.append("&radius=" + "30000");   //30,000 meters = ~20 miles
+            googlePlacesUrl.append("&type=" + "pet_store");
+            googlePlacesUrl.append("&key=" + "AIzaSyCRifebkgQdcCRnSNYdkb8G6HsuySjlCpI"); //Personal Google Places Web API
+        }
 
         Log.d("getUrl", googlePlacesUrl.toString());
 

@@ -8,12 +8,12 @@
             android:title="News"/>
         <item
             android:id="@+id/pet_products"
-            android:icon="@drawable/ic_menu_business"
+            android:icon="@drawable/ic_menu_store"
             android:title="Pet Products"/>
         <item
             android:id="@+id/event_finder"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Find Events"/>
+            android:icon="@drawable/ic_menu_event"
+            android:title="Local Events"/>
         <item
             android:id="@+id/dog_sales"
             android:icon="@drawable/ic_menu_paw"
@@ -25,6 +25,6 @@
         <item
             android:id="@+id/dog_park_finder"
             android:icon="@drawable/ic_menu_location"
-            android:title="Local Dog Parks"/>
+            android:title="Nearby POI"/>
     </group>
 </menu>

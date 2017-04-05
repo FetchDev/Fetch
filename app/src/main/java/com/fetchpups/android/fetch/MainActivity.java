@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.dog_park_finder:
                 fragment = new DogParkMapsFragment();
-                title = "Dog Park Finder";
+                title = "Nearby POI";
                 break;
 
         }
