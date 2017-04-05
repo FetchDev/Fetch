@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
                 title = "News";
                 break;
             case R.id.pet_products:
-                fragment = new BlankFragment();
+                fragment = new PetProducts();
                 title = "Pet Products";
                 break;
             case R.id.event_finder:
