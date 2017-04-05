@@ -1,45 +1,47 @@
 package com.fetchpups.android.fetch;
 
 
-import android.os.Bundle;
+/**
+ * Created by micgl on 4/5/2017.
+ */
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+/**
+ * Created by micgl on 4/5/2017.
+ */
 import android.widget.ListView;
 
-import com.fetchpups.android.fetch.controllers.PetAdoptionAdapter;
-import com.fetchpups.android.fetch.models.PetAdoptionModel;
+import com.fetchpups.android.fetch.controllers.LocalEventAdapter;
+import com.fetchpups.android.fetch.models.LocalEventModel;
 import com.fetchpups.android.fetch.utils.ApiHandler;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class TestListViewFragment extends Fragment {
-    ArrayList<PetAdoptionModel> demoList;
-    PetAdoptionAdapter adapter;
+public class EventFinder extends Fragment {
+    ArrayList<LocalEventModel> eventList;
+    LocalEventAdapter adapter;
 
-
-    public TestListViewFragment() {
+    public EventFinder() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.example_adoption_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.local_event_view, container, false);
 
         //Initialize an empty list of the corresponding model
-        demoList = new ArrayList<>();
+        eventList = new ArrayList<>();
 
         //Standard ListView + Custom adapters boilerplate
-        ListView demoListView = (ListView) rootView.findViewById(R.id.adoption_list_view);
-        adapter = new PetAdoptionAdapter(getActivity(), demoList);
+        ListView demoListView = (ListView) rootView.findViewById(R.id.local_event_list_view);
+        adapter = new LocalEventAdapter(getActivity(), eventList);
         demoListView.setAdapter(adapter);
 
         return rootView;
@@ -50,7 +52,7 @@ public class TestListViewFragment extends Fragment {
         //Use the ApiHandler.update__ (whatever corresponds to the model) after setting the adapter to the list view
 
         //Calling this in onResume will allow the screen to refresh on preference changes as well
-        ApiHandler.updateDogAdoptionList(getActivity(), adapter, demoList);
+        ApiHandler.updateLocalEventList(getActivity(), adapter, eventList);
         super.onResume();
     }
 }

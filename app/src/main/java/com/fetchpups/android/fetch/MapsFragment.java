@@ -46,7 +46,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class DogParkMapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener {
+public class MapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener {
 
     //Map & Location Data
     private GoogleMap googleMap;

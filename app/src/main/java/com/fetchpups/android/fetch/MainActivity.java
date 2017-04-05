@@ -108,11 +108,11 @@ public class MainActivity extends AppCompatActivity
                 title = "Pet Products";
                 break;
             case R.id.event_finder:
-                fragment = new BlankFragment();
+                fragment = new EventFinder();
                 title = "Event finder";
                 break;
             case R.id.dog_sales:
-                fragment = new TestListViewFragment();
+                fragment = new DogListView();
                 title = "Dog Adoptions";
                 break;
             case R.id.cat_sales:
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                 title = "Cat Adoptions";
                 break;
             case R.id.dog_park_finder:
-                fragment = new DogParkMapsFragment();
+                fragment = new MapsFragment();
                 title = "Dog Park Finder";
                 break;
 
