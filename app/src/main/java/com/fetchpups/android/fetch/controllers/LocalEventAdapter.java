@@ -3,6 +3,7 @@ package com.fetchpups.android.fetch.controllers;
 /**
  * Created by micgl on 4/5/2017.
  */
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.fetchpups.android.fetch.EventWebView;
 import com.fetchpups.android.fetch.R;
 import com.fetchpups.android.fetch.models.LocalEventModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,15 +31,14 @@ public class LocalEventAdapter extends ArrayAdapter<LocalEventModel>{
         TextView eventDate;
         TextView location;
         ImageView imgUrl;
-
-
     }
+
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<LocalEventModel> mDataset;
 
     public LocalEventAdapter(Context context, ArrayList<LocalEventModel> dataset) {
-        super(context, R.layout.event_list_view, dataset);
+        super(context, R.layout.event_list_item_view, dataset);
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDataset = dataset;
@@ -56,7 +57,7 @@ public class LocalEventAdapter extends ArrayAdapter<LocalEventModel>{
         //Check if existing view is being reused, else inflate the view
         if(convertView == null){
             viewHolder = new LocalEventAdapter.ViewHolder();
-            convertView = mInflater.inflate(R.layout.event_list_view, parent, false);
+            convertView = mInflater.inflate(R.layout.event_list_item_view, parent, false);
             viewHolder.eventTime = (TextView) convertView.findViewById(R.id.item_event_time);
             viewHolder.eventDate = (TextView) convertView.findViewById(R.id.item_event_date);
             viewHolder.location = (TextView) convertView.findViewById(R.id.item_event_location);
@@ -75,7 +76,7 @@ public class LocalEventAdapter extends ArrayAdapter<LocalEventModel>{
         viewHolder.eventTitle.setText(currentEvent.getEventTitle());
         viewHolder.location.setText(currentEvent.getLocation());
         //Picasso library for remote sources for ImageViews
-        //Picasso.with(mContext).load(currentEvent.getImgUrl()).resize(300,300).centerCrop().into(viewHolder.imgUrl);
+        Picasso.with(mContext).load(currentEvent.getImgUrl()).resize(300,300).centerCrop().into(viewHolder.imgUrl);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

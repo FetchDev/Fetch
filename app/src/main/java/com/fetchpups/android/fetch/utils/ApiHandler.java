@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.fetchpups.android.fetch.DogListView;
 import com.fetchpups.android.fetch.models.LocalEventModel;
 import com.fetchpups.android.fetch.models.PetAdoptionModel;
 
@@ -32,7 +33,7 @@ import java.util.List;
  *  {@link #updateDogAdoptionList(Context, ArrayAdapter, List)}
  *  {@link #updateLocalEventList(Context, ArrayAdapter, List)}
  *
- *  Check {@link com.fetchpups.android.fetch.TestListViewFragment#onCreateView(LayoutInflater, ViewGroup, Bundle)}
+ *  Check {@link DogListView#onCreateView(LayoutInflater, ViewGroup, Bundle)}
  *  for an example using the updateList functions
  */
 public final class ApiHandler {

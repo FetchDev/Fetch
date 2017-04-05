@@ -9,16 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 
 /**
  * Created by micgl on 4/5/2017.
  */
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.fetchpups.android.fetch.controllers.LocalEventAdapter;
@@ -40,7 +34,7 @@ public class EventFinder extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.event_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.local_event_view, container, false);
 
         //Initialize an empty list of the corresponding model
         eventList = new ArrayList<>();

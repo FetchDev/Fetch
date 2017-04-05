@@ -17,12 +17,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TestListViewFragment extends Fragment {
+public class DogListView extends Fragment {
     ArrayList<PetAdoptionModel> demoList;
     PetAdoptionAdapter adapter;
 
 
-    public TestListViewFragment() {
+    public DogListView() {
         // Required empty public constructor
     }
 
