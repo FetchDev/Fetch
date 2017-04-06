@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        checkIfFirstRun();
+//        checkIfFirstRun();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new EventFinder()).commit();
     }
 
     @Override
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         //Process the fragment replacement as long as there's a valid fragment
         if(fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame, fragment);
+            ft.replace(R.id.frame, fragment).addToBackStack(null);
             ft.commit();
         }
 
