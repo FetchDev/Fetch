@@ -413,12 +413,15 @@ public final class ApiHandler {
         Elements eventPosts = body.getElementsByTag("article");
 
         for(Element eventPost : eventPosts){
-            String  mEventTitle, mEventTime, mEventDate, mLocation, mLocationUrl, mImgUrl, mSrcUrl;
+            String  mEventTitle, mEventDesc, mEventTime, mEventDate, mLocation, mLocationUrl, mImgUrl, mSrcUrl;
             boolean mIsUpcoming;
 
             //mEventTitle
             mEventTitle = eventPost.getElementsByClass("eventlist-title-link").text();
 //            Log.d("parseEventHtml", "Event : " + mEventTitle);
+
+            //mEventDesc
+            mEventDesc = eventPost.getElementsByClass("sqs-block-content").text().replace("\u00a0", " ");
 
             //mEventDate
             mEventDate = eventPost.getElementsByClass("event-date").text();
@@ -448,7 +451,7 @@ public final class ApiHandler {
 //            Log.d("parseEventHtml", "Event is: " + testTxt);
 
 
-            eventList.add(new LocalEventModel(mEventTitle, mEventDate, mEventTime, mLocation, mLocationUrl, mImgUrl, mSrcUrl, mIsUpcoming));
+            eventList.add(new LocalEventModel(mEventTitle, mEventDesc,mEventDate, mEventTime, mLocation, mLocationUrl, mImgUrl, mSrcUrl, mIsUpcoming));
         }
 
 

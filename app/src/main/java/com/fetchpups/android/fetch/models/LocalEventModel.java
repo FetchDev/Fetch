@@ -6,6 +6,7 @@ package com.fetchpups.android.fetch.models;
 
 public class LocalEventModel {
     private String mEventTitle;
+    private String mEventDesc;
     private String mEventTime;      //Holds the full range in a string ("9:00am - 3:00pm"). Directly from the web site, so it probably doesn't adjust to timezones.
     private String mEventDate;      //Also directly from the website ("Mar 13, 2017")
     private String mLocation;
@@ -14,15 +15,20 @@ public class LocalEventModel {
     private String mSrcUrl;         //Can't get the event's src url directly, so just use the post's self-url
     private boolean mIsUpcoming;
 
-    public LocalEventModel(String eventTitle, String eventDate, String eventTime, String location, String locationUrl, String imgUrl, String srcUrl, boolean isUpcoming) {
+    public LocalEventModel(String eventTitle, String eventDesc, String eventDate, String eventTime, String location, String locationUrl, String imgUrl, String srcUrl, boolean isUpcoming) {
         mImgUrl = imgUrl;
         mEventTime = eventTime;
         mEventTitle = eventTitle;
         mEventDate = eventDate;
+        mEventDesc = eventDesc;
         mSrcUrl = srcUrl;
         mLocation = location;
         mLocationUrl = locationUrl;
         mIsUpcoming = isUpcoming;
+    }
+
+    public String getEventDesc() {
+        return mEventDesc;
     }
 
     public String getSrcUrl() {
@@ -51,6 +57,11 @@ public class LocalEventModel {
 
     public String getLocationUrl() {
         return mLocationUrl;
+    }
+
+    public String getLocationAddr() {
+        return mLocationUrl.replace(" ", "+").substring(25);
+
     }
 
     public boolean isUpcoming() {

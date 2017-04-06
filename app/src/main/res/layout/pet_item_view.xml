@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@android:color/white"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
         app:cardCornerRadius="4dp"
         >
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Marshmallow"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="30sp"
                     android:textColor="@color/primary_text" />
 
 
@@ -42,6 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
                     android:text="Android 6.0"
                     android:textColor="@color/primary_text" />
 
@@ -57,4 +58,5 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
 </FrameLayout>

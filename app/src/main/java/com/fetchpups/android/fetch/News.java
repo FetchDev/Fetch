@@ -20,13 +20,14 @@ public class News extends Fragment {
     //String area = "tampa";
     WebView mWebView;
     ProgressBar prgBar;
+    String pageUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.weblayout, container, false);
         mWebView = (WebView) v.findViewById(R.id.webview);
         prgBar = (ProgressBar) v.findViewById(R.id.web_progress);
-        String pageUrl = ApiHandler.getCityPrefUrl(getActivity(), 5);
+        pageUrl = ApiHandler.getCityPrefUrl(getActivity(), 5);
 
         //Enable javascript ---not sure if needed
         WebSettings webSettings = mWebView.getSettings();
@@ -40,5 +41,5 @@ public class News extends Fragment {
 
         return v;
     }
-    
+
 }
