@@ -25,7 +25,7 @@ import android.graphics.RectF;
 import com.squareup.picasso.Transformation;
 
 /**
- * Created by julian on 13/6/21.
+ * Created by https://gist.github.com/aprock/6213395
  */
 public class RoundedCornersTransform implements Transformation {
     @Override

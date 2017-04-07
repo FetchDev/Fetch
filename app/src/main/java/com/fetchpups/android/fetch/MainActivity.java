@@ -1,9 +1,7 @@
 package com.fetchpups.android.fetch;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -144,22 +142,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    protected void checkIfFirstRun(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        //If the flag does not exist, true is returned from getBoolean()
-        if(prefs.getBoolean("is_first_run", true)){
-            prefs.edit().putBoolean("is_first_run", false).apply();
-            showFirstRunOptions();
-        }
-
-
-    }
-
-    protected void showFirstRunOptions(){
-        Fragment fragment = new IntroFragment();
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame, fragment);
-        ft.commit();
-    }
+//    protected void checkIfFirstRun(){
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//        //If the flag does not exist, true is returned from getBoolean()
+//        if(prefs.getBoolean("is_first_run", true)){
+//            prefs.edit().putBoolean("is_first_run", false).apply();
+//            showFirstRunOptions();
+//        }
+//
+//
+//    }
+//
+//    protected void showFirstRunOptions(){
+//        Fragment fragment = new IntroFragment();
+//
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.frame, fragment);
+//        ft.commit();
+//    }
 }

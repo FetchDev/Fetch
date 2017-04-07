@@ -8,25 +8,14 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:weightSum="1">
-
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.26"
-            android:text="Fetch"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="30sp" />
+    android:weightSum="2">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_map_paw"
-            android:layout_weight="0.26" />
+            android:layout_height="0dp"
+            android:src="@mipmap/ic_launcher_new"
+            android:layout_weight="2" />
 
 
 </LinearLayout>
