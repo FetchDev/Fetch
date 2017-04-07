@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity
                 fragment = new News();  //Modify this to correct fragment after respective fragment files created
                 title = "News";
                 break;
+            case R.id.national_news:
+                fragment = new NationalNews();
+                title = "National News";
+                break;
             case R.id.pet_products:
                 fragment = new PetProducts();
                 title = "Pet Products";
@@ -125,7 +129,6 @@ public class MainActivity extends AppCompatActivity
                 fragment = new MapsFragment();
                 title = "Dog Park Finder";
                 break;
-
         }
 
         //Process the fragment replacement as long as there's a valid fragment

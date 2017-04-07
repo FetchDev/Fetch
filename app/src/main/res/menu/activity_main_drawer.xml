@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_news"
             android:title="News"/>
         <item
+            android:id="@+id/national_news"
+            android:icon="@drawable/ic_menu_news"
+            android:title="National News"/>
+        <item
             android:id="@+id/pet_products"
             android:icon="@drawable/ic_menu_store"
             android:title="Pet Products"/>

@@ -13,6 +13,4 @@
     tools:context="com.fetchpups.android.fetch.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-
-
 </FrameLayout>
